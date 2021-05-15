@@ -1,0 +1,198 @@
+dim() {
+	docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}"
+}
+
+dri() {
+	docker rmi -f "$@"
+}
+
+drm() {
+	docker rm -f "$@"
+}
+
+dra() {
+	docker rm -f $(docker ps -aq)
+}
+
+dip() {
+	docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$@"
+}
+
+dps() {
+    docker ps -a
+}
+
+mkcd() {
+	mkdir -p "$@"
+	cd "$@" || exit
+}
+
+del() {
+	rm -rf "$@"
+}
+
+tre() {
+	tree -aC -I '.git' --dirsfirst "$@" | less -FRNX
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given
+# location
+o() {
+	if [ $# -eq 0 ]; then
+		xdg-open .	> /dev/null 2>&1
+	else
+		xdg-open "$@" > /dev/null 2>&1
+	fi
+}
+
+# print at CYAN color
+c() {
+	printf "\e[1;34m$@\n"
+}
+
+idea() {
+    (nohup /home/jarvis/software/intellij/idea/bin/idea.sh &>/dev/null &)
+}
+
+pcat() {
+    pygmentize -f terminal256 -O style=native -g "$@"
+}
+
+postman() {
+    (nohup /home/jarvis/software/Postman/Postman &>/dev/null &)
+}
+
+size() {
+    du -b --max-depth 1 | sort -nr | perl -pe 's{([0-9]+)}{sprintf "%.1f%s", $1>=2**30? ($1/2**30, "G"): $1>=2**20? ($1/2**20, "M"): $1>=2**10? ($1/2**10, "K"): ($1, "")}e'
+}
+
+pc() {
+    (nohup /home/jarvis/software/popcorn-0.4.4/Popcorn-Time &>/dev/null &)
+}
+
+nb() {
+    (nohup /home/jarvis/Downloads/incubating-netbeans-10.0-bin/netbeans/bin/netbeans &>/dev/null &)
+}
+
+assets() {
+    docker run --rm -p 8080:8080 b3:futures
+}
+
+uc() {
+    (nohup /usr/bin/up-clock &>/dev/null &)
+}
+
+mt5() {
+    xhost +; \
+    docker run --rm -it --hostname docker-mt5 \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /home/jarvis/.Xauthority:/root/.Xauthority \
+    -v mt5-vol:/root/.wine/drive_c/Program\ Files/MetaTrader\ 5\ Terminal \
+    -e DISPLAY=$DISPLAY \
+    --device /dev/snd \
+    mt5:PRD bash
+}
+
+demo() {
+    xhost +; \
+    docker run --rm -it --hostname docker-mt5-DEMO \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /home/jarvis/.Xauthority:/root/.Xauthority \
+    -v mt5-demo-vol:/root/.wine/drive_c/Program\ Files/MetaTrader\ 5\ Terminal \
+    -e DISPLAY=$DISPLAY \
+    --device /dev/snd \
+    mt5:demo-account bash
+}
+
+pointofix() {
+    xhost +; \
+    docker run --rm -it --hostname wine32 \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /home/jarvis/.Xauthority:/root/.Xauthority \
+    -e DISPLAY=$DISPLAY \
+    pointofix:1.8.0 bash
+}
+
+yt() {
+    /home/jarvis/software/youtube-dl-2020.12.07/youtube-dl/youtube-dl -i --extract-audio --audio-format mp3 --audio-quality 0 "$@"
+}
+
+tor() {
+    docker run --rm -p 3000:3000 \
+    -v /home/jarvis/torrent:/downloads \
+    jpillora/cloud-torrent:latest
+}
+
+cf() {
+    confluent start kafka
+    sleep 1
+    (nohup /home/jarvis/kafkatool2/kafkatool &>/dev/null &)
+}
+
+hr() {
+    reflex -r '\.go$' -- sh -c "go run *.go"
+}
+
+hrw() {
+    # web app
+    reflex -r '\.go$' -s -- sh -c "go run *.go"
+}
+
+droid() {
+    (nohup /home/jarvis/software/android-studio-ide/android-studio/bin/studio.sh &>/dev/null &)
+}
+
+goland() {
+    (nohup /home/jarvis/software/Goland/GoLand-2019.2.3/bin/goland.sh &>/dev/null &)
+}
+
+ac() {
+    (nohup /opt/cisco/anyconnect/bin/vpnui &>/dev/null &)
+}
+
+fs() {
+    (nohup /usr/bin/flameshot &>/dev/null &)
+}
+
+rc() {
+    docker run --rm --network=skynet -p 3000:3000 \
+    -e MONGO_URL=mongodb://mongo1:27017/rocketchat \
+    -e MONGO_OPLOG_URL=mongodb://mongo1:27017/local \
+    rocketchat/rocket.chat:3.0.4
+}
+
+robo() {
+    (nohup /home/jarvis/software/robo3t/bin/robo3t &>/dev/null &)
+}
+
+ad() {
+    ldapsearch -x -W -h 10.123.8.163 \
+    -D "c109896@corpcaixa" \
+    -b "OU=Usuarios,OU=CAIXA,DC=corp,DC=caixa,DC=gov,DC=br" \
+    $@
+
+}
+
+ora() {
+ (nohup sqldeveloper &>/dev/null &)   
+}
+
+ads() {
+    (nohup /home/jarvis/software/ApacheDirectoryStudio/ApacheDirectoryStudio &>/dev/null &)
+}
+
+rem() {
+    (nohup /usr/bin/remmina &>/dev/null &)
+}
+
+p() {
+    ffplay "$@"
+}
+
+ir2020() {
+    /home/jarvis/ProgramasRFB/IRPF2021/java-runtime/bin/java -jar /home/jarvis/ProgramasRFB/IRPF2021/irpf.jar
+}
+
+calibre() {
+    (nohup /home/jarvis/software/calibre-5.14.0/calibre &>/dev/null &)
+}
